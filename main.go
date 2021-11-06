@@ -27,40 +27,50 @@ func main() {
 	for _, argv := range os.Args[1:] {
 		if isCommand(argv) {
 			pattern += "command "
-			argdump += "command:" + argv + "\n"
+			argdump += "command: " + argv + "\n"
 		} else if isSubCommand(argv) {
 			pattern += "subcommand "
-			argdump += "subcommand:" + argv + "\n"
+			argdump += "subcommand: " + argv + "\n"
 		} else if isMetaCommand(argv) {
 			pattern += "metacommand "
-			argdump += "metacommand:" + argv + "\n"
+			argdump += "metacommand: " + argv + "\n"
 		} else if isLocalhost(argv) {
 			pattern += "localhost "
-			argdump += "localhost:" + argv + "\n"
+			argdump += "localhost: " + argv + "\n"
 		} else if isRemotehost(argv) {
 			pattern += "host "
-			argdump += "host:" + argv + "\n"
+			argdump += "host: " + argv + "\n"
 		} else if isScript(argv) {
 			pattern += "script "
-			argdump += "script:" + argv + "\n"
+			argdump += "script: " + argv + "\n"
 		} else if isOption(argv) {
 			pattern += "option "
-			argdump += "option:" + argv + "\n"
+			argdump += "option: " + argv + "\n"
 		} else {
 			pattern += "unrecognized"
-			argdump += "unrecognized:" + argv + "\n"
+			argdump += "unrecognized: " + argv + "\n"
 		}
 	}
 
 	var exitCode uint
 
-	if strings.HasPrefix(pattern, "command host") ||
-		strings.HasPrefix(pattern, "command localhost") {
+	if strings.HasPrefix(pattern, "command subcommand host") {
+		exitCode = executeSubCommand(os.Args[1], os.Args[2], os.Args[3], os.Args[4:])
+
+	} else if strings.HasPrefix(pattern, "command subcommand localhost") {
+		exitCode = executeSubCommand(os.Args[1], os.Args[2], "localhost", os.Args[4:])
+
+	} else if strings.HasPrefix(pattern, "command subcommand") {
+		exitCode = executeSubCommand(os.Args[1], os.Args[2], "localhost", os.Args[3:])
+
+	} else if strings.HasPrefix(pattern, "command host") {
 		exitCode = executeCommand(os.Args[1], os.Args[2], os.Args[3:])
 
-	} else if strings.HasPrefix(pattern, "command subcommand host") ||
-		strings.HasPrefix(pattern, "command subcommand localhost") {
-		exitCode = executeSubCommand(os.Args[1], os.Args[2], os.Args[3], os.Args[4:])
+	} else if strings.HasPrefix(pattern, "command localhost") {
+		exitCode = executeCommand(os.Args[1], "localhost", os.Args[3:])
+
+	} else if strings.HasPrefix(pattern, "command") {
+		exitCode = executeCommand(os.Args[1], "localhost", os.Args[2:])
 
 	} else if strings.HasPrefix(pattern, "metacommand") {
 		exitCode = executeMetaCommand(os.Args[1], os.Args[2:])
@@ -86,7 +96,7 @@ func isCommand(argv string) bool {
 
 func isSubCommand(argv string) bool {
 	switch argv {
-	case "configs", "scripts":
+	case "hosts", "configs", "scripts":
 		return true
 	default:
 		return false
@@ -183,6 +193,9 @@ func executeSubCommand(command string, subcommand string, host string, options [
 	cmd := fmt.Sprintf("%s %s", command, subcommand)
 
 	switch cmd {
+	case "info hosts":
+		return commandInfoHosts(host, options)
+
 	case "info configs":
 		return commandInfoConfigs(host, options)
 
