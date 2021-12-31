@@ -22,7 +22,7 @@ import (
 )
 
 // Get the IPv4 address of the given hostname by reading it from /etc/neph/conf/hostnames
-func GetHostname(hostname string) (string, uint) {
+func GetHostname(hostname string) (string, Exitcode) {
 	root, err := figtree.ReadConfig(HOSTNAMES_CONF)
 	if err != nil {
 		fmt.Printf("unable to read hostnames configuration from %s\n", HOSTNAMES_CONF)
@@ -40,7 +40,7 @@ func GetHostname(hostname string) (string, uint) {
 }
 
 // Get a map of all configured hosts => IP address
-func GetAllHostnames() (map[string]string, uint) {
+func GetAllHostnames() (map[string]string, Exitcode) {
 	configuredHosts := make(map[string]string)
 
 	root, err := figtree.ReadConfig(HOSTNAMES_CONF)

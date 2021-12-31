@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/sftp"
 )
 
-func writeHello(host string) uint {
+func writeHello(host string) Exitcode {
 	clientConn, exitCode := connectViaSSH(host)
 	if exitCode != SUCCESS {
 		return exitCode

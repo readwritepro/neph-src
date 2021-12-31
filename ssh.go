@@ -16,7 +16,7 @@ import (
 // connect to remote host via SSH
 // returns a clientConnection and an exitCode
 // The caller must Close the ssh.Clinet connection when finished using it
-func connectViaSSH(host string) (*ssh.Client, uint) {
+func connectViaSSH(host string) (*ssh.Client, Exitcode) {
 
 	// The server can be contacted, without authentication, using the ssh-keyscan utility, which will
 	// retreive its public host key, which is stored on the server at /etc/ssh/ssh_host_rsa_key.pub

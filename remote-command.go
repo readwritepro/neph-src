@@ -15,7 +15,7 @@ import (
 // Contact the remote host via SSH and run the specified neph CLI command
 // The nephCommand is something like "neph command options"
 // Returns the final exitCode of the remote neph CLI command
-func remoteNephCommand(remoteHost string, nephCommand string) uint {
+func remoteNephCommand(remoteHost string, nephCommand string) Exitcode {
 
 	clientConn, exitCode := connectViaSSH(remoteHost)
 	if exitCode != SUCCESS {
@@ -44,7 +44,7 @@ func remoteNephCommand(remoteHost string, nephCommand string) uint {
 			fmt.Printf("failed to run '%s' on '%s': %v\n", nephCommand, remoteHost, err)
 		}
 		ee := err.(*ssh.ExitError)
-		rc := uint(ee.Waitmsg.ExitStatus())
+		rc := Exitcode(ee.Waitmsg.ExitStatus())
 		return rc
 	}
 

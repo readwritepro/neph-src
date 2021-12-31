@@ -6,6 +6,6 @@
 package main
 
 // Handle "neph scrub host"
-func commandScrub(host string, options []string) uint {
+func commandScrub(host string, options []string) Exitcode {
 	return SUCCESS
 }

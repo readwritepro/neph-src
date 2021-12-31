@@ -13,7 +13,7 @@ import (
 
 // Handle "neph info hosts [remoteHost]"
 // Get the hostnames and the IP addresses configured for neph usage
-func commandInfoHosts(host string, options []string) uint {
+func commandInfoHosts(host string, options []string) Exitcode {
 	if host == "localhost" {
 		configuredHosts, exitCode := GetAllHostnames()
 		if exitCode == SUCCESS {
@@ -29,7 +29,7 @@ func commandInfoHosts(host string, options []string) uint {
 
 // Handle "neph info configs [remoteHost]"
 // List all of the config files in /etc/neph/conf/
-func commandInfoConfigs(host string, options []string) uint {
+func commandInfoConfigs(host string, options []string) Exitcode {
 	if host == "localhost" {
 		return walkDir("/etc/neph/conf")
 	} else {
@@ -39,7 +39,7 @@ func commandInfoConfigs(host string, options []string) uint {
 
 // Handle "neph info scripts [remoteHost]"
 // List all of the scripts in /var/neph/scripts/
-func commandInfoScripts(host string, options []string) uint {
+func commandInfoScripts(host string, options []string) Exitcode {
 	if host == "localhost" {
 		return walkDir("/var/neph/scripts")
 	} else {
@@ -48,7 +48,7 @@ func commandInfoScripts(host string, options []string) uint {
 }
 
 // walk the directory, printing the filenames found
-func walkDir(dir string) uint {
+func walkDir(dir string) Exitcode {
 	dirEntries, err := ioutil.ReadDir(dir)
 	if err != nil {
 		fmt.Printf("Unable to list info for %s: %v\n", dir, err)

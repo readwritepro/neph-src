@@ -8,7 +8,7 @@ package main
 var NEPH_VERSION = "0.0.2"
 
 const (
-	SUCCESS                          uint = iota // 0 = everything worked
+	SUCCESS                      Exitcode = iota // 0 = everything worked
 	FS_FAILURE                                   // 1 = general file system failure
 	BASH_SCRIPT_FAILED                           // 1 = typical failure code coming from a Bash script or executable, never explicilty used by Neph
 	SSH_LOCAL_CONFIGURATION_FAILURE              // 2 = SSH on the localhost not configured to be used by Neph
@@ -32,3 +32,6 @@ const (
 const (
 	HOSTNAMES_CONF string = "/etc/neph/conf/hostnames"
 )
+
+type Exitcode uint
+

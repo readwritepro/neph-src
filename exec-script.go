@@ -17,7 +17,7 @@ import (
 )
 
 // Handle the "neph exec" CLI
-func commandExecScript(host string, options []string) uint {
+func commandExecScript(host string, options []string) Exitcode {
 
 	if isLocalhost(host) {
 		localScript := options[0]
@@ -33,7 +33,7 @@ func commandExecScript(host string, options []string) uint {
 }
 
 // Execute a neph script on the localhost
-func executeLocalScript(localScript string, options []string) uint {
+func executeLocalScript(localScript string, options []string) Exitcode {
 	scriptPath := filepath.Join("/var/neph/scripts", localScript)
 	if _, err := os.Stat(scriptPath); errors.Is(err, os.ErrNotExist) {
 		fmt.Printf("local script %s does not exist", scriptPath)
@@ -49,13 +49,13 @@ func executeLocalScript(localScript string, options []string) uint {
 	fmt.Printf("%s", string(out))
 	if err != nil {
 		fmt.Printf("%v", err)
-		return uint(cmd.ProcessState.ExitCode())
+		return Exitcode(cmd.ProcessState.ExitCode())
 	}
 	return SUCCESS
 }
 
 // execute a neph script on aremote  host
-func executeRemoteScript(host string, remoteScript string, options []string) uint {
+func executeRemoteScript(host string, remoteScript string, options []string) Exitcode {
 
 	clientConn, exitCode := connectViaSSH(host)
 	if exitCode != SUCCESS {
@@ -117,7 +117,7 @@ func isRemoteScriptExecutable(clientConn *ssh.Client, remoteScript string) bool 
 
 // Run the remote script, capture its output, return its exitCode
 // Returns true if the script was executed and returned 0
-func doRemoteScript(clientConn *ssh.Client, remoteScript string) uint {
+func doRemoteScript(clientConn *ssh.Client, remoteScript string) Exitcode {
 	session, err := clientConn.NewSession()
 	if err != nil {
 		fmt.Printf("failed to create session: %v\n", err)
@@ -136,7 +136,7 @@ func doRemoteScript(clientConn *ssh.Client, remoteScript string) uint {
 	if err != nil {
 		fmt.Printf("%s didn't exit cleanly: %v\n", scriptPath, err)
 		ee := err.(*ssh.ExitError)
-		rc := uint(ee.Waitmsg.ExitStatus())
+		rc := Exitcode(ee.Waitmsg.ExitStatus())
 		return rc
 	}
 	return SUCCESS

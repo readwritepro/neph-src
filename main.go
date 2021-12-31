@@ -52,7 +52,7 @@ func main() {
 		}
 	}
 
-	var exitCode uint
+	var exitCode Exitcode
 
 	if strings.HasPrefix(pattern, "command subcommand host") {
 		exitCode = executeSubCommand(os.Args[1], os.Args[2], os.Args[3], os.Args[4:])
@@ -158,7 +158,7 @@ func isRemotehost(argv string) bool {
 
 // execute a neph command
 // returns an exitcode where 0 is success, anything else is a failure
-func executeCommand(command string, host string, options []string) uint {
+func executeCommand(command string, host string, options []string) Exitcode {
 	switch command {
 	case "init":
 		return commandInit(host, options)
@@ -189,7 +189,7 @@ func executeCommand(command string, host string, options []string) uint {
 
 // execute a neph command
 // returns an exitcode where 0 is success, anything else is a failure
-func executeSubCommand(command string, subcommand string, host string, options []string) uint {
+func executeSubCommand(command string, subcommand string, host string, options []string) Exitcode {
 	cmd := fmt.Sprintf("%s %s", command, subcommand)
 
 	switch cmd {
@@ -209,7 +209,7 @@ func executeSubCommand(command string, subcommand string, host string, options [
 }
 
 // help and version metacommands
-func executeMetaCommand(metaCommand string, options []string) uint {
+func executeMetaCommand(metaCommand string, options []string) Exitcode {
 	switch metaCommand {
 	case "version":
 		fmt.Printf("neph version %s\n", NEPH_VERSION)

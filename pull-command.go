@@ -6,6 +6,6 @@
 package main
 
 // Handle "neph pull remoteHost"
-func commandPull(host string, options []string) uint {
+func commandPull(host string, options []string) Exitcode {
 	return SUCCESS
 }

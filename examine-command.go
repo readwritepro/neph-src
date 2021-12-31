@@ -6,6 +6,6 @@
 package main
 
 // Handle "neph examine host configfile"
-func commandExamine(host string, options []string) uint {
+func commandExamine(host string, options []string) Exitcode {
 	return SUCCESS
 }

@@ -6,6 +6,6 @@
 package main
 
 // Handle "neph apply host configfile dtbfile"
-func commandApply(host string, options []string) uint {
+func commandApply(host string, options []string) Exitcode {
 	return SUCCESS
 }
